@@ -2,9 +2,10 @@ const express = require("express");
 const mongojs = require("mongojs");
 const logger = require("morgan")
 var path = require("path");
+const db1 = require("./models/index")
 
 const databaseUrl = "workout";
-const collections = ["exercises"];
+const collections = ["workouts"];
 const db = mongojs(databaseUrl, collections);
 
 const app = express();
@@ -38,6 +39,21 @@ app.post("/submit", (req, res) => {
         }
     });
 });
+
+
+app.get("api/workouts", function (req, res) {
+    db1.workouts.find({}).then(
+        function (workout) {
+            res.json(workout)
+        })
+});
+app.get("api/workouts/range", function (req, res) {
+    db1.workouts.find({}).sort({ "day": 1 }).then(function (workout) {
+        res.json(workout);
+    })
+});
+
+
 // app.post("/submit", ({ body }, res) => {
 //     const book = body;
 
